@@ -1,24 +1,24 @@
-# 🔄 Identity Reconciliation
+# Identity Reconciliation
 
 An API to reconcile user identity based on `email` and/or `phoneNumber` using contact precedence logic. Helps deduplicate contact information and return a unified contact trail.
 
 ---
 
-## 🧩 Reconciliation Scenarios
+## Reconciliation Scenarios
 
 ![Reconciliation Scenarios](https://raw.githubusercontent.com/kksahay/identify-reconciliation/465b620cd760e41bfbace83cb39d22dcdf1cd17a/static/Reconciliation%20Scenarios.png)
 
 ---
 
-## 📘 API Documentation
+## API Documentation
 
 **Swagger UI**: [https://identify-reconciliation-bvue.onrender.com/swagger/ui](https://identify-reconciliation-bvue.onrender.com/swagger/ui)
 
 ---
 
-## 🧪 Reconciliation Cases
+## Reconciliation Cases
 
-### ✅ Case 0: Repeated phone and email is given
+### Case 0: Repeated phone and email is given
 
 **No new data detected: Already present in the system**
 
@@ -26,7 +26,7 @@ An API to reconcile user identity based on `email` and/or `phoneNumber` using co
 
 ---
 
-### 🆕 Case 1: Both phone and email are unique
+### Case 1: Both phone and email are unique
 
 **Both new data detected: Primary contact has to be created**
 
@@ -34,7 +34,7 @@ An API to reconcile user identity based on `email` and/or `phoneNumber` using co
 
 ---
 
-### ☝️ Case 2: Email exists but phone does not
+### Case 2: Email exists but phone does not
 
 **New data detected: Secondary contact has to be created**
 
@@ -48,7 +48,7 @@ An API to reconcile user identity based on `email` and/or `phoneNumber` using co
 
 ---
 
-### ☎️ Case 3: Phone exists but email does not
+### Case 3: Phone exists but email does not
 
 **New data detected: Secondary contact has to be created**
 
@@ -62,7 +62,7 @@ An API to reconcile user identity based on `email` and/or `phoneNumber` using co
 
 ---
 
-### 🔁 Case 4: Both phone and email exist
+### Case 4: Both phone and email exist
 
 **No new data detected: Only linking/merging is required**
 
@@ -74,7 +74,7 @@ An API to reconcile user identity based on `email` and/or `phoneNumber` using co
   - Update all its linked records to point to `newestPrimary`
   - Return the contact trail
 
-#### Case 4B: Both are secondary belonging to the same primary contact
+#### Case 4B: Both are secondary belonging to same primary contacts
 
 - **Action**: Return the existing contact trail without changes.
 
@@ -102,11 +102,11 @@ An API to reconcile user identity based on `email` and/or `phoneNumber` using co
 
 ---
 
-## 📬 API Endpoint
+## API Endpoint
 
 **POST** [`/api/identify`](https://identify-reconciliation-bvue.onrender.com/api/identify)
 
-### 📥 Request
+### Request
 
 ```json
 {
@@ -115,15 +115,38 @@ An API to reconcile user identity based on `email` and/or `phoneNumber` using co
 }
 ```
 
+> At least one of `phoneNumber` or `email` must be provided.
+
 ### Response
 
 ```json
 {
-	"contact":{
-		"primaryContatctId": number,
-		"emails": string[], //first email being the primary
-		"phoneNumbers": string[], //first phoneNumber being the primary
-		"secondaryContactIds": number[]
-	}
+  "contact": {
+    "primaryContatctId": 1,
+    "emails": ["john@example.com", "alt@example.com"],
+    "phoneNumbers": ["9876543210"],
+    "secondaryContactIds": [2, 3]
+  }
 }
+```
+
+> The first element in `emails` and `phoneNumbers` is always from the `primary` contact.
+
+---
+
+## Structure Overview
+
+```
+├── src/
+│   ├── controller/IdentifyController.ts
+│   ├── routes/identifyRoute.ts
+│   ├── routes/swaggerRoute.ts
+│   ├── utils/queries/IdentifyQueries.ts
+│   └── utils/types.ts
+│   └── App.ts
+│   └── server.ts
+├── Dockerfile
+├── package.json
+├── .env
+└── README.md
 ```
