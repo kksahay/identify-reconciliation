@@ -250,7 +250,7 @@ export class IdentifyController {
           this.populateSecondaryContacts(contactTrail, secondaryContacts);
         }
 
-        //case4D: emailContact is primary, phoneContact is secondary
+        //case4D: emailContact is primary but phoneContact is secondary
         else if (
           emailContact.linkPrecedence === "primary" &&
           phoneContact.linkPrecedence === "secondary"
@@ -293,7 +293,7 @@ export class IdentifyController {
           this.populateSecondaryContacts(contactTrail, secondaryContacts);
         }
 
-        //case4E: phoneContact is primary, emailContact is secondary
+        //case4E: phoneContact is primary but emailContact is secondary
         else if (
           phoneContact.linkPrecedence === "primary" &&
           emailContact.linkPrecedence === "secondary"
